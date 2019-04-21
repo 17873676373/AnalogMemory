@@ -8,17 +8,12 @@
 
 namespace app\api\controller\v1;
 
-use app\api\service\Token as TokenService;
+use app\api\model\Sign as SignModel;
 use app\api\validate\dateCheck;
-use app\api\validate\IDCheck;
 use app\api\validate\MonthCheck;
 use app\api\validate\SignCreate;
-use app\api\validate\SignToMattersGet;
 use app\api\validate\TimeCheck;
-use app\exception\SignException;
 use app\exception\SuccessMessage;
-use app\api\model\Sign as SignModel;
-use think\Exception;
 
 class Sign
 {

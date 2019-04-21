@@ -9,7 +9,6 @@
 namespace app\api\model;
 
 
-use app\api\service\Token;
 use app\exception\SignException;
 use app\exception\SuccessMessage;
 use think\Exception;

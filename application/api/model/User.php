@@ -10,11 +10,8 @@ namespace app\api\model;
 
 
 
-use app\api\service\Token;
-
 class User extends BaseModel
 {
-
     protected $hidden = ["id","openid","create_time","update_time"];
     public function getByOpenID($openid){
         return $this->where('openid','=',$openid)
