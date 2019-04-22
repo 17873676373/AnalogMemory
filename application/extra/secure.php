@@ -7,6 +7,8 @@
  */
 
 return [
+    //盐，加验证复杂度
     'token_salt' => 'kcsanbvsbajxxks',
+    //缓存时间
     'token_expire_in' => 28800,
 ];

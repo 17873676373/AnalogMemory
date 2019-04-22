@@ -80,6 +80,7 @@ class Matters extends BaseModel
             if($cache_time){
                 $duration = time()-$cache_time;
                 Cache::clear();
+                //主要停止计时，计入总签到和连续签到方法
                 return (new Sign)->setIncTodayStudyTime($duration);
             }else{
                 return (new Sign)->setIncTodayStudyTime($var['duration']);
