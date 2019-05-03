@@ -30,12 +30,14 @@ class Sign extends BaseModel
     public function getMattersBySignIdAndDate($date){
         $result = self::with(['matters','matters.img'])
             ->where("date",'=',$date)
+            ->where('user_id','=',$this->user_id)
             ->find();
         if(!$result){
             $array['date'] = $date;
             $this->createSignDate($array);
             $result = self::with(['matters','matters.img'])
                 ->where("date",'=',$date)
+                ->where('user_id','=',$this->user_id)
                 ->find();
         }
         return $result;
@@ -47,7 +49,7 @@ class Sign extends BaseModel
         return $result;
     }
     public function createSignDate($array){
-        if(!$this->isEmptySignDate($array['date'])){
+//        if(!$this->isEmptySignDate($array['date'])){
             $array['user_id'] = $this->user_id;
             $result = $this->save($array);
             if(!$result){
@@ -56,7 +58,7 @@ class Sign extends BaseModel
                     'msg' => '新增日期信息异常',
                     'error_code' => '3002'
                 ]);
-            }
+//            }
             return $result;
         }
     }

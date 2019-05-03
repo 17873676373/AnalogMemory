@@ -10,7 +10,10 @@ namespace app\api\model;
 
 
 
-class User extends BaseModel
+use app\api\service\TokenUser;
+use think\Model;
+
+class User extends Model
 {
     protected $hidden = ["id","openid","create_time","update_time"];
     public function getByOpenID($openid){
@@ -18,7 +21,8 @@ class User extends BaseModel
             ->find();
     }
     public function setMotto($motto){
-        self::where("id","=",$this->user_id)
+        $user_id = TokenUser::getUidByTokenVar();
+        self::where("id","=",$user_id)
             ->update([
                 'motto' => $motto,
             ]);

@@ -7,5 +7,5 @@
  */
 
 return [
-    'url_prefix' => 'http://localhost/static/image'
+    'url_prefix' => 'http://47.102.205.111/static/image'
 ];
