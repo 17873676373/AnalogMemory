@@ -56,8 +56,8 @@ class Matters extends BaseModel
             ]);
         }
     }
-    public function startStudy($id, $user_id){
-        $this->userConsistency($id, $user_id);
+    public function startStudy($id){
+        $this->userConsistency($id, $this->user_id);
         $var = $this->getMatterVar($id);
         if($var['identifier'] == 0){
             $this->cacheTimingData($id, $var['duration']);
@@ -67,8 +67,8 @@ class Matters extends BaseModel
             self::update($array);
         }
     }
-    public function stopStudy($id, $user_id){
-        $this->userConsistency($id, $user_id);
+    public function stopStudy($id){
+        $this->userConsistency($id, $this->user_id);
         $var = $this->getMatterVar($id);
         $array = [];
         $array['id'] = $id;
@@ -79,7 +79,7 @@ class Matters extends BaseModel
             $cache_time = Cache::get($id);
             if($cache_time){
                 $duration = time()-$cache_time;
-                Cache::clear();
+                Cache::rm($id);
                 //主要停止计时，计入总签到和连续签到方法
                 return (new Sign)->setIncTodayStudyTime($duration);
             }else{
@@ -116,6 +116,9 @@ class Matters extends BaseModel
     }
     protected function userConsistency($id, $user_id){
         $model = self::get($id);
+        if(!$model){
+            throw new  MatterException();
+        }
         $result = $model->visible(['user_id'])->toArray();
         if($result['user_id'] != $user_id){
             throw new BaseException([

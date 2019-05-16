@@ -14,12 +14,17 @@ use app\api\validate\FutureUpdate;
 use app\api\validate\IDCheck;
 use app\exception\FutureException;
 use app\exception\SuccessMessage;
+use app\api\service\TokenUser;
 
 class Future
 {
     public function getAllFuturePlans(){
-        $user_id = 1;
-        $result = FutureModel::all(function ($query) use ($user_id){
+        $user_id = TokenUser::getUidByTokenVar();
+        $model = new FutureModel();
+	$today = strtotime(date('Y-m-d'));
+        $result = $model->where('future_date','>',$today)
+	->order('future_date')
+        ->select(function ($query) use ($user_id){
             $query->where('user_id', '=', $user_id);
         })->toArray();
         return json($result);
@@ -28,7 +33,7 @@ class Future
         $validate = new FutureCreate();
         $validate->goCheck();
         $array = $validate->getDateByRule(input('post.'));
-        $array['user_id'] = 1;
+        $array['user_id'] = TokenUser::getUidByTokenVar();
         $array['future_date'] = strtotime($array['future_date']);
         $model = (new FutureModel())->save($array);
         if(!$model){

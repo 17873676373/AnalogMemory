@@ -10,6 +10,7 @@ namespace app\api\controller\v1;
 
 
 use app\api\model\Matters as MattersModel;
+use app\api\service\Aphorisms;
 use app\api\service\Token as TokenService;
 use app\api\validate\dateCheck;
 use app\api\validate\IDCheck;
@@ -43,15 +44,18 @@ class Matters
     public function startStudyMatter($id){
         (new IDCheck())->goCheck();
         $model = new MattersModel();
-        $user_id = 1;
-        $duration = $model->startStudy($id,$user_id);
-        throw new SuccessMessage();
+        $duration = $model->startStudy($id);
+        $backgroud_url = $model->getBackGroundUrl();
+        $aphorism = Aphorisms::getAphorisms();
+        throw new SuccessMessage(['msg' => [
+            'img' => $backgroud_url,
+            'aphorism' => $aphorism
+        ]]);
     }
     public function stopStudyMatter($id){
         (new IDCheck())->goCheck();
         $model = new MattersModel();
-        $user_id = 1;
-        $return = $model->stopStudy($id, $user_id);
+        $return = $model->stopStudy($id);
         if($return){
             return json([
                 'msg' => '今日计划学习时间已达到，自动打卡',
@@ -59,5 +63,8 @@ class Matters
             ]);
         }
         throw new SuccessMessage();
+    }
+    public function monitorPlanTime(){
+
     }
 }

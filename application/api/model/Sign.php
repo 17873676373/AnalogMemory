@@ -28,14 +28,18 @@ class Sign extends BaseModel
         return $this->belongsTo("User","user_id","id");
     }
     public function getMattersBySignIdAndDate($date){
-        $result = self::with(['matters','matters.img'])
+        $result = self::with(['matters'=>function($query){
+            $query->with('img')->order('status');
+        }])
             ->where("date",'=',$date)
             ->where('user_id','=',$this->user_id)
             ->find();
         if(!$result){
             $array['date'] = $date;
             $this->createSignDate($array);
-            $result = self::with(['matters','matters.img'])
+            $result = self::with(['matters'=>function($query){
+                $query->with('img')->order('status');
+            }])
                 ->where("date",'=',$date)
                 ->where('user_id','=',$this->user_id)
                 ->find();
@@ -45,6 +49,8 @@ class Sign extends BaseModel
     public function getRanking($date){
         $result = self::with(['user'])
             ->where('date','=',$date)
+	    ->where("study_time",">",0)
+	    ->order('study_time', 'desc')
             ->select();
         return $result;
     }
@@ -73,14 +79,18 @@ class Sign extends BaseModel
     public function setIncTodayStudyTime($duration){
         $date = strtotime(date('Y-m-d'));
         $result = self::where('date','=',$date)
+	    ->where('user_id','=',$this->user_id)	
             ->setInc('study_time',$duration);
         if(!$result){
             throw new Exception("学习时间累加异常");
         }
-        $sign = self::where('date','=',$date)->find();
-        if($sign['study_time']>=$sign['plan_time']){
+        $sign = self::where('date','=',$date)
+	        ->where('user_id','=',$this->user_id)
+	        ->find();
+        if($sign['plan_time']!=-1&&(int)$sign['study_time']>=(int)$sign['plan_time']){
             if($sign['sign_status'] != 1){
                 self::where('date','=',$date)
+		            ->where('user_id', '=', $this->user_id)
                     ->update([
                         'sign_status' => 1,
                     ]);
@@ -96,6 +106,8 @@ class Sign extends BaseModel
         return false;
     }
     public function getMonth($date){
+	$today = strtotime(date('Y-m-d'));
+        $this->ContinuousSign($today, false);
         $monthFirst = strtotime(date('Y-m-1',$date));
         $monthLast =  strtotime(date('Y-m-d',strtotime(date('Y-m',$date).'+1 month -1 day')));
         $result = $this->where('user_id', '=', $this->user_id)
@@ -126,17 +138,32 @@ class Sign extends BaseModel
             }
         }
     }
-    protected function ContinuousSign($date){
+    protected function ContinuousSign($date, $type=true){
         $sign = self::where("date","=",$date-3600*24)
+            ->where('user_id', '=', $this->user_id)
             ->find();
-        if($sign['sign_status'] != 1||!$sign){
-            User::where('id','=',$this->user_id)
-                ->update([
-                    'num' => 1,
-                ]);
+        if($type){
+            if(!$sign||$sign['sign_status'] != 1){
+                $user = User::where('id','=',$this->user_id)
+                    ->update([
+                        'num' => 1,
+                    ]);
+            }else{
+                User::where('id','=',$this->user_id)
+                    ->setInc('num',1);
+            }
         }else{
-            User::where('id','=',$this->user_id)
-                ->setInc('num',1);
+            if(!$sign||$sign['sign_status'] != 1){
+                $user = User::where('id','=',$this->user_id)
+                    ->find();
+                if($user['num'] > 1){
+                    User::where('id','=',$this->user_id)
+                        ->update([
+                            'num' => 0,
+                        ]);
+                }
+            }
         }
+
     }
 }

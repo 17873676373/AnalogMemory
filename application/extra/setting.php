@@ -7,5 +7,8 @@
  */
 
 return [
-    'url_prefix' => 'http://47.102.205.111/static/image'
+    'url_prefix' => 'http://47.102.205.111/static/image',
+    'background_total' => 7,
+    'background_suffix' => '.jpg',
+    'aphorism_total' => 30
 ];
