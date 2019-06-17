@@ -30,9 +30,12 @@ Route::post("api/:v/future/update","api/:v.Future/updateFuturePlan");
 Route::delete("api/:v/future/delete/:id","api/:v.Future/deleteFuturePlan");
 
 Route::get("api/:v/ranking","api/:v.Ranking/getTodayRanking");
+Route::get("api/:v/rankingbycontinuity","api/:v.Ranking/getTodayRankingByContinuity");
 
 Route::post("api/:v/user/setmotto","api/:v.User/setMotto");
+Route::get("api/:v/user/getinformation","api/:v.User/getDetailedInformation");
 
+Route::post("api/:v/feedback", "api/:v.Feedback/setFeedback");
 return [
     '__pattern__' => [
         'name' => '\w+',
