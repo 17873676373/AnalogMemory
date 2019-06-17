@@ -2,18 +2,19 @@
 namespace app\index\controller;
 
 use think\Cache;
-use think\response\Json;
 
 class Index
 {
+    //页式存储
     public function printTable()
     {
         $table = new \app\api\service\Table();
         return json($table->getTableCache());
     }
     public function transTable($address){
+        $table = new \app\api\service\Table();
         $table_size = Cache::get('table_size');
-        $table = json_decode(Cache::get('table'),true);
+        $table = $table->getTableCache();
         $table_number = intval($address/$table_size);
         $block_number = $table[$table_number];
         $table_address = $address%$table_size;
@@ -42,13 +43,19 @@ class Index
             'physics_address' => $physics_address,
         ]);
     }
+    public function transTableOut(){
+        $table = new \app\api\service\Table();
+        return $table->rmTableCache();
+    }
 
+    //段式存储
     public function printSect(){
         $table = new \app\api\service\Table();
         return json($table->getSectCache());
     }
     public function transSect($number,$address){
-        $sect = json_decode(Cache::get('sect'),true);
+        $table = new \app\api\service\Table();
+        $sect = $table->getSectCache();
         //段号号超出段号数
         if ($number > count($sect)){
             return json([
@@ -72,13 +79,19 @@ class Index
             'physics_address' => $physics_address_max,
         ]);
     }
+    public function transSectOut(){
+        $table = new \app\api\service\Table();
+        $table->rmSectCache();
+    }
 
+    //段页式存储
     public function printSectTable(){
         $table = new \app\api\service\Table();
         return json($table->getTableSectCache());
     }
     public function transSectTable($number,$address){
-        $sect = json_decode(Cache::get('ts_sect'),true);
+        $table = new \app\api\service\Table();
+        $sect = $table->getTableSectCache();
         //段号号超出段号数
         if ($number > count($sect)){
             return json([
@@ -109,5 +122,9 @@ class Index
             'table_address' => $table_address,
             'physics_address' => $physics_address,
         ]);
+    }
+    public function transSectTableOut(){
+        $table = new \app\api\service\Table();
+        $table->rmTableSectCache();
     }
 }

@@ -36,6 +36,10 @@ class Table
             return $this->setTableCache(10);
         }
     }
+    public function rmTableCache(){
+        return Cache::rm('table');
+    }
+
     public function setSectCache($line){
         //随机生成基址，单位为Byte
         //段长随机生成限制
@@ -53,6 +57,9 @@ class Table
         }else{
             return $this->setSectCache(5);
         }
+    }
+    public function rmSectCache(){
+        return Cache::rm('sect');
     }
 
     public function setTableSectCache($line){
@@ -79,10 +86,13 @@ class Table
         return $array;
     }
     public function getTableSectCache(){
-        if (!Cache::has('ts_sect')){
+        if (Cache::has('ts_sect')){
             return json_decode(Cache::get('ts_sect'),true);
         }else{
             return $this->setTableSectCache(5);
         }
+    }
+    public function rmTableSectCache(){
+        return Cache::rm('ts_sect');
     }
 }
