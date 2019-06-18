@@ -48,14 +48,6 @@ class Index
             'physics_address' => $physics_address,
         ]);
     }
-    public function transTableOut(){
-        $table = new \app\api\service\Table();
-        $table->rmTableCache();
-        return json([
-            'error' => 0,
-            'info' => '正确'
-        ]);
-    }
 
     //段式存储
     public function printSect(){
@@ -93,14 +85,6 @@ class Index
             'number' => $number,
             'sect_address' => ($array['sect_address']),
             'physics_address' => $physics_address_max,
-        ]);
-    }
-    public function transSectOut(){
-        $table = new \app\api\service\Table();
-        $table->rmSectCache();
-        return json([
-            'error' => 0,
-            'info' => '正确'
         ]);
     }
 
@@ -151,9 +135,9 @@ class Index
             'physics_address' => $physics_address,
         ]);
     }
-    public function transSectTableOut(){
+    public function transRemove(){
         $table = new \app\api\service\Table();
-        $table->rmTableSectCache();
+        $table->rmCache();
         return json([
             'error' => 0,
             'info' => '正确'

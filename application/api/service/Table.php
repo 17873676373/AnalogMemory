@@ -95,7 +95,9 @@ class Table
             return $this->setTableSectCache();
         }
     }
-    public function rmTableSectCache(){
-        return Cache::rm('ts_sect');
+    public function rmCache(){
+        Cache::rm('table');
+        Cache::rm('sect');
+        Cache::rm('ts_sect');
     }
 }
