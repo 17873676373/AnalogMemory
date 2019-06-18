@@ -45,7 +45,11 @@ class Index
     }
     public function transTableOut(){
         $table = new \app\api\service\Table();
-        return $table->rmTableCache();
+        $table->rmTableCache();
+        return json([
+            'error' => 0,
+            'info' => '正确'
+        ]);
     }
 
     //段式存储
@@ -82,6 +86,10 @@ class Index
     public function transSectOut(){
         $table = new \app\api\service\Table();
         $table->rmSectCache();
+        return json([
+            'error' => 0,
+            'info' => '正确'
+        ]);
     }
 
     //段页式存储
@@ -126,5 +134,9 @@ class Index
     public function transSectTableOut(){
         $table = new \app\api\service\Table();
         $table->rmTableSectCache();
+        return json([
+            'error' => 0,
+            'info' => '正确'
+        ]);
     }
 }
