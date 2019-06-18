@@ -10,12 +10,7 @@ class Index
     {
         $table = new \app\api\service\Table();
         $array = $table->getTableCache();
-        $result = [];
-        foreach ($array as $key => $value){
-            $result['table_number'][] = $key;
-            $result['block_number'][] = $value;
-        }
-        return json($result);
+        return json($array);
     }
     public function transTable($address){
         $table = new \app\api\service\Table();
@@ -53,13 +48,7 @@ class Index
     public function printSect(){
         $table = new \app\api\service\Table();
         $array = $table->getSectCache();
-        $result = [];
-        foreach ($array as $key => $value){
-            $result['sect_number'][] = $key;
-            $result['sect_address'][] = $value['sect_address'];
-            $result['sect_size'][] = $value['sect_size'];
-        }
-        return json($result);
+        return json($array);
     }
     public function transSect($number,$address){
         $table = new \app\api\service\Table();
@@ -92,14 +81,7 @@ class Index
     public function printSectTable(){
         $table = new \app\api\service\Table();
         $array = $table->getTableSectCache();
-        $result = [];
-        foreach ($array as $key => $value){
-            $result['sect_number'][] = $key;
-            $result['table_length'][] = $value['table_length'];
-            $result['table_address'][] = $value['table_address'];
-            $result['table'][] = $value['table'];
-        }
-        return json($result);
+        return json($array);
     }
     public function transSectTable($number,$address){
         $table = new \app\api\service\Table();
