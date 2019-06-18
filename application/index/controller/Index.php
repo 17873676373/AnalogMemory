@@ -9,15 +9,19 @@ class Index
     public function printTable()
     {
         $table = new \app\api\service\Table();
-        return json($table->getTableCache());
+        $array = $table->getTableCache();
+        $result = [];
+        foreach ($array as $key => $value){
+            $result['table_number'][] = $key;
+            $result['block_number'][] = $value;
+        }
+        return json($result);
     }
     public function transTable($address){
         $table = new \app\api\service\Table();
         $table_size = Cache::get('table_size');
         $table = $table->getTableCache();
         $table_number = intval($address/$table_size);
-        $block_number = $table[$table_number];
-        $table_address = $address%$table_size;
         //页号超出页号数
         if ($table_number > count($table)){
             return json([
@@ -25,7 +29,8 @@ class Index
                 'info' => '地址越界'
             ]);
         }
-
+        $block_number = $table[$table_number];
+        $table_address = $address%$table_size;
         //页内偏移大于页面大小
         if ($table_address > $table_size){
             return json([
@@ -55,7 +60,14 @@ class Index
     //段式存储
     public function printSect(){
         $table = new \app\api\service\Table();
-        return json($table->getSectCache());
+        $array = $table->getSectCache();
+        $result = [];
+        foreach ($array as $key => $value){
+            $result['sect_number'][] = $key;
+            $result['sect_address'][] = $value['sect_address'];
+            $result['sect_size'][] = $value['sect_size'];
+        }
+        return json($result);
     }
     public function transSect($number,$address){
         $table = new \app\api\service\Table();
@@ -95,7 +107,15 @@ class Index
     //段页式存储
     public function printSectTable(){
         $table = new \app\api\service\Table();
-        return json($table->getTableSectCache());
+        $array = $table->getTableSectCache();
+        $result = [];
+        foreach ($array as $key => $value){
+            $result['sect_number'][] = $key;
+            $result['table_length'][] = $value['table_length'];
+            $result['table_address'][] = $value['table_address'];
+            $result['table'][] = $value['table'];
+        }
+        return json($result);
     }
     public function transSectTable($number,$address){
         $table = new \app\api\service\Table();

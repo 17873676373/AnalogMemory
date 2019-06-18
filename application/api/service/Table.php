@@ -13,8 +13,9 @@ use think\Cache;
 
 class Table
 {
-    public function setTableCache($line){
+    public function setTableCache(){
         //页面大小随机生成，单位为Byte
+        $line = rand(10,20);
         $m = rand(9,13);
         $table_size = 2;
         for ($i=0; $i<$m; $i++){
@@ -33,14 +34,15 @@ class Table
         if (Cache::has('table')){
             return json_decode(Cache::get('table'),true);
         }else{
-            return $this->setTableCache(10);
+            return $this->setTableCache();
         }
     }
     public function rmTableCache(){
         return Cache::rm('table');
     }
 
-    public function setSectCache($line){
+    public function setSectCache(){
+        $line = rand(5,10);
         //随机生成基址，单位为Byte
         //段长随机生成限制
         $array = [];
@@ -55,14 +57,15 @@ class Table
         if (Cache::has('sect')){
             return json_decode(Cache::get('sect'),true);
         }else{
-            return $this->setSectCache(5);
+            return $this->setSectCache();
         }
     }
     public function rmSectCache(){
         return Cache::rm('sect');
     }
 
-    public function setTableSectCache($line){
+    public function setTableSectCache(){
+        $line = rand(5,10);
         $array = [];
         for ($i=1; $i<=$line; $i++){
             //随机生成页面大小，单位为Byte
@@ -89,7 +92,7 @@ class Table
         if (Cache::has('ts_sect')){
             return json_decode(Cache::get('ts_sect'),true);
         }else{
-            return $this->setTableSectCache(5);
+            return $this->setTableSectCache();
         }
     }
     public function rmTableSectCache(){
