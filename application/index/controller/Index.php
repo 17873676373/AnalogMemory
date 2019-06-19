@@ -88,7 +88,7 @@ class Index
         $table = new \app\api\service\Table();
         $array = $table->getTableSectCache();
         $count = count($array);
-        if ($number>$count||$number<$count){
+        if ($number>$count||$number<=0){
             return json([
                 'error' => 1,
                 'info' => '指定段号不存在'
