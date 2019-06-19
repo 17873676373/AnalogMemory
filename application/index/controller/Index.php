@@ -83,6 +83,20 @@ class Index
         $array = $table->getTableSectCache();
         return json($array);
     }
+    //获取段页式中的指定一张表
+    public function printSectTableToTable($number){
+        $table = new \app\api\service\Table();
+        $array = $table->getTableSectCache();
+        $count = count($array);
+        if ($number>$count||$number<$count){
+            return json([
+                'error' => 1,
+                'info' => '指定段号不存在'
+            ]);
+        }
+        $table = $array[$number]['table'];
+        return json($table);
+    }
     public function transSectTable($number,$address){
         $table = new \app\api\service\Table();
         $sect = $table->getTableSectCache();
